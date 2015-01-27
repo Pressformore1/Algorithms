@@ -1,0 +1,74 @@
+<?php
+require 'objectif.class.php';
+require 'subjectif1.class.php';
+require 'subjectif2.class.php';
+
+class Pinochio {
+    private $_objectif;
+    private $_subjectif1;
+    private $_subjectif2;
+    private $t1,$t2;
+    
+    public function __construct($obj=array(),$sub1=array(),$sub2=array()) {
+        
+        $this->_objectif = new Objectif($obj);
+        $this->_subjectif1 = new Subjectif1($sub1);
+        $this->_subjectif2 = new Subjectif2($sub2);
+        
+    }
+    
+    public function add($class='objectif',$row=array()) {
+        switch($class) {
+            case 'objectif':
+                $this->_objectif->add($row[0],$row[1],$row[2]);
+                break;
+            case 'subjectif1':
+                $this->_subjectif1->add($row[0],$row[1],$row[2]);
+                break;
+            case 'subjectif2':
+                $this->_subjectif2->add($row[0],$row[1]);
+                break;
+            default:
+                echo 'Erreur ! la class '.$class.' n\'existe pas ! ';
+                exit;
+        }
+        
+    }
+    
+    public function exeAll() {
+        $this->t1 = microtime(true);
+        $this->_objectif->exeScore();
+        $this->_subjectif1->exeScore();
+        $this->_subjectif2->exeScore();
+        $this->t2 = microtime(true);
+    }
+    
+    public function getScore() {
+        $CS = $this->_objectif->getScore();
+        $MS = $this->_subjectif1->getScore();
+        $SC = $this->_subjectif2->getScore();
+        echo $CS . ' * ' . $MS . ' + ' . $SC;
+        return ($CS * $MS) + $SC;
+    }
+    
+    /**
+     * Reset the array
+     */
+    public function resetData() {
+        $this->_objectif->resetData();
+        $this->_subjectif1->resetData();
+        $this->_subjectif2->resetData();
+    }
+    
+    /**
+     * Return the time to execute the calculation
+     * @return type
+     */
+    public function getDuration() {
+        return $this->t2-$this->t1;
+    }
+    
+
+    
+}
+?>
