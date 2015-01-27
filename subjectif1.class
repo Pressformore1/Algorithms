@@ -1,0 +1,48 @@
+<?php
+/**
+ * Get subjectif1 Score, info about tag and categories  
+ */
+class Subjectif1 {
+    private $_score = 0;
+    private $_data;
+    
+    public function __construct($data=array()) {
+        $this->_data = $data;
+    }
+    
+    public function add($coeff=1,$qty=1,$isBanned=false) {
+        $this->_data[] = array($coeff,$qty,$isBanned);
+    }
+    
+    
+    private function logit($x) {
+        
+        return $x > 0 && $x <1 ? log($x/(1-$x)) : 1;
+    }
+    
+    public function getScore() {
+        return $this->logit($this->_score);
+    }
+    
+    private function exe($row) {
+        if($row[2]) {
+            return -1*($row[0]^$row[1]); 
+        } else {
+            return $row[0]*$row[1];
+        }
+    }
+    
+    public function exeScore() {
+        $this->_score = 0;
+        foreach($this->_data as $d) {
+            $this->_score += $this->exe($d);
+        }
+    }
+    /**
+     * Reset the array
+     */
+    public function resetData() {
+        $this->_data = array();
+    }
+}
+?>
