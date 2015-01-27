@@ -1,0 +1,38 @@
+<?php
+
+/** Donnée de config pour les constante et autre coefficient **/
+
+// fonction de dégressivité pour le temps
+const TIME_DEGR_FUNCTION = '(x^2)-1';//le coeff du temps devra être positif, d'autre fonction peuvent être utilisé, x sera remplacé
+
+
+require 'pinochio.class.php';
+
+$pinochio = new Pinochio();
+
+//1 . Soit passé trois array pour le constructeur de pinochio : $data objectif, subjectif1 et subjectif2. Ces tableau 
+//doivent être un array d'array 
+//array (
+//  array($coeff, $value, $type);
+//);
+// 2. utilisé la fonction add
+
+$pinochio->add('objectif',array($coeff=1,$value=10,$type='reach'));
+$pinochio->add('objectif',array(2,time()-10000,'time'));
+
+
+$pinochio->add('subjectif1', array($coeff=1,$qty=20,$isBanned=true));//isBanned = true : formule -1* coeff ^qty , sinon coeff * qty 
+
+
+$pinochio->add('subjectif2', array($coeff=3,$qty=10));//si un friend a interragis, l'article gagne un "bonus". Préciser ici le coefficient 
+//pour press par exemple, et le nombre de press donné a cet article par des amis (ici par exemple, 10 amis on chacun donné 1 press)
+
+$pinochio->exeAll();
+
+echo 'Le score est de '.$pinochio->getScore().' <br />';
+
+echo 'L\'opération à durée : '.$pinochio->getDuration().' ms';
+
+$pinochio->resetData(); // remet a zero les array, ça permet de réutilisé le même objet pour recalculer d'autre score
+
+?>
