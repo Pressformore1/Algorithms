@@ -1,0 +1,75 @@
+<?php
+/**
+ * Get Objective Score (Reach, view, time ... )
+ */
+class Objectif {
+    
+    private $_data = array();
+    private $_score = 0;
+    
+    
+    public function __construct($data = array()) {
+        $this->_data = $data;
+    }
+    /**
+     * Add 1 row to data array
+     * @param type $coeff
+     * @param type $value
+     * @param type $type
+     */
+    public function add($coeff=1, $value=0, $type='') {
+        $this->_data[] = array($coeff,$value,$type); 
+    }
+    /**
+     * Return the data array
+     * @return type
+     */
+    public function getData() {
+        return $this->_data;
+    }
+    /**
+     * Reset the array
+     */
+    public function resetData() {
+        $this->_data = array();
+    }
+    /**
+     * compute for one row of data, return the value
+     * @param type $row
+     */
+    private function exe($row=array()) {
+        
+        $type = strtolower($row[2]);
+        
+        switch($type) {
+            case 'time':
+                $t = $row[1]/time();
+                $fct = str_replace('x', $t, TIME_DEGR_FUNCTION);
+                return $row[0]*($fct);
+                break;
+            default:
+                return $row[1] != 0 ? $row[0]*log($row[1]) : 0;
+        }
+    }
+    /**
+     * Compute the score
+     */
+    public function exeScore() {
+        $this->_score = 0;
+        foreach($this->_data as $d) {
+            $this->_score += $this->exe($d);
+        }
+    }
+    
+    /**
+     * Return the score
+     * @return type
+     */
+    public function getScore() {
+        return $this->_score;
+    }
+    
+    
+}
+
+?>
