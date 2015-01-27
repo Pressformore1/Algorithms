@@ -1,0 +1,41 @@
+<?php
+/**
+ * get subjectif2, info about interaction with friend
+ */
+class Subjectif2 {
+    private $_score =0;
+    private $_data;
+    
+    
+    public function __construct($data=array()) {
+        $this->_data = $data;
+    }
+    
+    
+    public function add($coeff=1,$qty=1) {
+        $this->_data[] = array($coeff,$qty);
+    }
+    
+    private function exe($row) {
+        return $row[0] * $row[1];
+    }
+    
+    public function exeScore() {
+        $this->_score = 0;
+        foreach($this->_data as $d) {
+            $this->_score += $this->exe($d);
+        }
+    }
+    
+    public function getScore() {
+        return $this->_score;
+    }
+    /**
+     * Reset the array
+     */
+    public function resetData() {
+        $this->_data = array();
+    }
+}
+
+?>
